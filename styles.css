@@ -1,0 +1,17 @@
+textarea, #diff {
+  font-size: 25px;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+#diff {
+  display: flex;
+  justify-content: space-around;
+  margin: 10px;
+}
+
+#initial, #final {
+  border: 1px solid grey;
+  width: 100%;
+  min-height: 40px;
+}
+

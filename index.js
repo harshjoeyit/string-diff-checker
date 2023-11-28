@@ -2,6 +2,9 @@ console.log("Hello");
 
 const textAreaEl = document.querySelector("#inp");
 const outputEl = document.querySelector("#outp");
+
+// const initText = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const initText = "0123456789";
 let lastInpIdx = 0;
 let lastInpVal = "";
 
@@ -10,8 +13,6 @@ let eventLog = [];
 
 // Initialize
 (function init() {
-  // const initText = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  const initText = "0123456789";
   // Set default value for input
   textAreaEl.value = initText;
   lastInpVal = initText;
@@ -29,29 +30,12 @@ textAreaEl.addEventListener("keyup", (e) => {
     // );
     
     if (code === "Backspace") {
-      
-      const currInpIdx = textAreaEl.selectionStart;
-      
-      // remove all the characters between initial and final index
-      console.log("init: ", lastInpIdx, 
-      "final: ", currInpIdx, 
-      "characters deleted: ", lastInpVal.substring(lastInpIdx, currInpIdx));
-
-      eventLog.push({
-        type: "delete",
-        st: lastInpIdx,
-        en: currInpIdx,
-      });
-    
-      lastInpIdx = currInpIdx;
-      lastInpVal = textAreaEl.value;
-
-      console.log("[Event:Keyup] current position => ", lastInpIdx);
-    
+      saveDeleteEventDebounce()
+    } else if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(code)) {
+      console.log("User navgatiing..")
+      lastInpIdx = textAreaEl.selectionStart;
     } else {
-      // taking a naive assumption that everything except backspace is a character key (ignoring Tab, Capslock, shift key, etc) 
-    
-      // save insert event
+      // taking a naive assumption that everything except backspace and arrow keys is a character key (ignoring Tab, Capslock, shift key, etc) 
       saveInsertWithDebounce()
     }
   },
@@ -78,6 +62,26 @@ function debounce(func, delay) {
   };
 }
 
+function saveDeleteEvent() {
+  const currInpIdx = textAreaEl.selectionStart;
+      
+  // remove all the characters between initial and final index
+  console.log("init: ", lastInpIdx, 
+  "final: ", currInpIdx, 
+  "characters deleted: ", lastInpVal.substring(lastInpIdx, currInpIdx));
+
+  eventLog.push({
+    type: "delete",
+    st: lastInpIdx,
+    en: currInpIdx,
+  });
+
+  lastInpIdx = currInpIdx;
+  lastInpVal = textAreaEl.value;
+
+  console.log("[Event:Keyup] current position => ", lastInpIdx);
+}
+
 function saveInsertEvent() {
   console.log("saveInsertEvent() called")
   const currInpIdx = textAreaEl.selectionStart;
@@ -95,14 +99,25 @@ function saveInsertEvent() {
   lastInpIdx = currInpIdx;
 }
 
-const saveInsertWithDebounce = debounce(saveInsertEvent, 500);
-
+const saveInsertWithDebounce = debounce(saveInsertEvent, 100);
+const saveDeleteEventDebounce = debounce(saveDeleteEvent, 100);
 
 // Show event log 
 const showBtnEl = document.querySelector("#showlog");
 showBtnEl.addEventListener("click", (e) => {
   console.log(eventLog);
 })
+
+function showDiff() {
+  let orgStr = initText;
+  eventLog.forEach(eve => {
+    if (eve.type === "delete") {
+
+    } else if (eve.type === "insert") {
+
+    }
+  });
+}
 
 /*
 1. TODO: 

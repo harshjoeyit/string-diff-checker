@@ -9,13 +9,18 @@
   <body>
     <div>
       <textarea name="inp" id="inp" cols="30" rows="5"> </textarea>
+      <button type="button" id="showlog">Save and Show Diff</button>
     </div>
-
-    <button type="button" id="showlog">Show event log</button>
-
     <div id="diff">
-      <div id="initial"></div>
-      <div id="final"></div>
+      <div>
+        Initial
+        <div id="initial"></div>
+      </div>
+
+      <div>
+        Final
+        <div id="final"></div>
+      </div>
     </div>
   </body>
   <script src="./index.js"></script>
